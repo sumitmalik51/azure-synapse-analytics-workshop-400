@@ -65,6 +65,33 @@ function EnableIEFileDownload
   Set-ItemProperty -Path $HKCU -Name "1604" -Value 0 -ErrorAction SilentlyContinue -Verbose
 }
 
+#Disable PopUp for network configuration
+Function DisableServerMgrNetworkPopup
+    {
+        cd HKLM:\
+        New-Item -Path HKLM:\System\CurrentControlSet\Control\Network -Name NewNetworkWindowOff -Force 
+
+		Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask -Verbose
+    }
+ 
+ #Install edge browser
+ Function InstallEdgeChromium
+    {
+        #Download and Install edge
+        $WebClient = New-Object System.Net.WebClient
+        $WebClient.DownloadFile("http://dl.delivery.mp.microsoft.com/filestreamingservice/files/6d88cf6b-a578-468f-9ef9-2fea92f7e733/MicrosoftEdgeEnterpriseX64.msi","C:\Packages\MicrosoftEdgeBetaEnterpriseX64.msi")
+        sleep 5
+        
+	    Start-Process msiexec.exe -Wait '/I C:\Packages\MicrosoftEdgeBetaEnterpriseX64.msi /qn' -Verbose 
+        sleep 5
+        $WshShell = New-Object -comObject WScript.Shell
+        $Shortcut = $WshShell.CreateShortcut("C:\Users\Public\Desktop\Azure Portal.lnk")
+        $Shortcut.TargetPath = """C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"""
+        $argA = """https://portal.azure.com"""
+        $Shortcut.Arguments = $argA 
+        $Shortcut.Save()
+
+    }
 #Create InstallAzPowerShellModule
 function InstallAzPowerShellModule
 {
@@ -125,6 +152,10 @@ DisableInternetExplorerESC
 
 EnableIEFileDownload
 
+DisableServerMgrNetworkPopup
+
+InstallEdgeChromium
+
 InstallAzPowerShellModule
 #InstallAzPowerShellModuleMSI
 
@@ -181,15 +212,26 @@ Import-Module Az.CosmosDB
 
 #download the git repo...
 Write-Host "Download Git repo." -ForegroundColor Green -Verbose
-git clone https://github.com/solliancenet/azure-synapse-analytics-workshop-400.git synapse-ws-L400
+git clone https://github.com/SpektraSystems/azure-synapse-analytics-workshop-400.git synapse-ws-L400
 
-cd './synapse-ws-L400/artifacts/environment-setup/automation'
+$LabFilesDirectory = "C:\LabFiles"
 
-#execute setup scripts
-Write-Host "Executing post scripts." -ForegroundColor Green -Verbose
-./01-environment-setup.ps1
-./03-environment-validate.ps1
+$WebClient = New-Object System.Net.WebClient
+$WebClient.DownloadFile("https://raw.githubusercontent.com/SpektraSystems/azure-synapse-analytics-workshop-400/master/artifacts/environment-setup/spektra/logontask.ps1","C:\LabFiles\logontask.ps1")
 
-sleep 20
+#Enable Autologon
+$AutoLogonRegPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
+Set-ItemProperty -Path $AutoLogonRegPath -Name "AutoAdminLogon" -Value "1" -type String 
+Set-ItemProperty -Path $AutoLogonRegPath -Name "DefaultUsername" -Value "$($env:ComputerName)\wsuser" -type String  
+Set-ItemProperty -Path $AutoLogonRegPath -Name "DefaultPassword" -Value "Password.1!!" -type String
+Set-ItemProperty -Path $AutoLogonRegPath -Name "AutoLogonCount" -Value "1" -type DWord
+
+# Scheduled Task
+$Trigger= New-ScheduledTaskTrigger -AtLogOn
+$User= "$($env:ComputerName)\wsuser" 
+$Action= New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\Powershell.exe" -Argument "-executionPolicy Unrestricted -File $LabFilesDirectory\logontask.ps1"
+Register-ScheduledTask -TaskName "Setup" -Trigger $Trigger -User $User -Action $Action -RunLevel Highest -Force 
+
+Restart-Computer -Force
 
 Stop-Transcript
