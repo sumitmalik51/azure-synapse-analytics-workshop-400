@@ -474,9 +474,11 @@ if ($dataLakeAccount -eq $null) {
 
 if ($overallStateIsValid -eq $true) {
     Write-Information "Validation Passed"
+     $validstatus = "Successfull"
 }
 else {
     Write-Warning "Validation Failed - see log output"
+     $validstatus = "Failed"
 }
 
         $depId = $deploymentID
