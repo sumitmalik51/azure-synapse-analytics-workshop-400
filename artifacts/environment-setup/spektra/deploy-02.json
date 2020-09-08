@@ -245,18 +245,6 @@
       "Storage Account Name": {
         "type": "String",
         "value": "[variables('adlsStorageAccountName')]"
-      },
-      "LABVM Admin Username": {
-        "type": "String",
-        "value": "[parameters('vmAdminUsername')]"
-      },
-      "LABVM Admin Password": {
-        "type": "String",
-        "value": "[parameters('vmAdminPassword')]"
-      },
-      "LABVM DNS Name": {
-        "type": "String",
-        "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('publicIpAddressName'))).dnsSettings.fqdn]"
       }
     }
   }
