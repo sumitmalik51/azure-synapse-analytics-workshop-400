@@ -2,7 +2,7 @@
 
 ## Log-in to the Azure portal
 
-1. In the virtual machine provided on the left side, open **Microsoft Edge browser** and sign in to the Azure Portal (<https://portal.azure.com/>) with the following credentials:
+1.  Open a Browser and sign in to the Azure Portal (<https://portal.azure.com/>) with the following credentials:
    
    * **Azure Usename/Email**:  <inject key="AzureAdUserEmail"></inject>
    * **Azure Password**:  <inject key="AzureAdUserPassword"></inject>
