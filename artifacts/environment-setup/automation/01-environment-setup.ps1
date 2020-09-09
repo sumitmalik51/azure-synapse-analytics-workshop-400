@@ -236,6 +236,14 @@ elseif($rgLocation -like "westeurope")
 {
   $publicDataUrl = "https://l400westeurope.blob.core.windows.net/"
 }
+elseif($rgLocation -like "southeastasia")
+{
+  $publicDataUrl = "https://l400southeastasia.blob.core.windows.net/"
+}
+elseif($rgLocation -like "westus2")
+{
+  $publicDataUrl = "https://l400westus2.blob.core.windows.net/"
+}
 else   #Check for southcentralus
 {
   $publicDataUrl = "https://l400southcentralus.blob.core.windows.net/"
