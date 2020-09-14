@@ -12,3 +12,5 @@
 3. If you see the pop-up **You have free Azure Advisor recommendations!** , close the window to continue the lab. 
 
 4. If a **Welcome to Microsoft Azure** popup window appears, click **Maybe Later** to skip the tour.
+
+5. Click on **Next** and follow the instructions to perform the lab.
