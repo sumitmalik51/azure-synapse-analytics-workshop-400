@@ -474,7 +474,14 @@ if ($dataLakeAccount -eq $null) {
 
 if ($overallStateIsValid -eq $true) {
     Write-Information "Validation Passed"
-     $validstatus = "Successfull"
+    
+    $result = Get-SQLPool -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -WorkspaceName $workspaceName -SQLPoolName $sqlPoolName
+    if ($result.properties.status -eq "Online") {
+    Control-SQLPool -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -WorkspaceName $workspaceName -SQLPoolName $sqlPoolName -Action pause
+    Wait-ForSQLPool -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -WorkspaceName $workspaceName -SQLPoolName $sqlPoolName -TargetStatus Paused
+    }
+     
+    $validstatus = "Successfull"
 }
 else {
     Write-Warning "Validation Failed - see log output"
