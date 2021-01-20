@@ -216,7 +216,7 @@ When you query Parquet files using Synapse SQL Serverless, you can explore the d
 7. The Spark engine can analyze the Parquet files and infer the schema. To do this, enter the following in the new cell:
 
 ```python
-data_path.printSchema()
+df.printSchema()
 ```
 
 Your output should look like the following:
@@ -243,7 +243,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 
-profitByDateProduct = (data_path.groupBy("TransactionDate","ProductId")
+profitByDateProduct = (df.groupBy("TransactionDate","ProductId")
     .agg(
         sum("ProfitAmount").alias("(sum)ProfitAmount"),
         round(avg("Quantity"), 4).alias("(avg)Quantity"),
@@ -284,18 +284,18 @@ root
 
 2. We have been using Python code in these cells up to this point. If we want to query the files using SQL syntax, one option is to create a temporary view of the data within the dataframe. Execute the following in a new cell to create a view named `user_profiles`:
 
-    ```python
-    # create a view called user_profiles
-    df.createOrReplaceTempView("user_profiles")
-    ```
+```python
+# create a view called user_profiles
+df.createOrReplaceTempView("user_profiles")
+```
 
 3. Create a new cell. Since we want to use SQL instead of Python, we use the `%%sql` magic to set the language of the cell to SQL. Execute the following code in the cell:
 
-    ```sql
-    %%sql
+```sql
+%%sql
 
-    SELECT * FROM user_profiles LIMIT 10
-    ```
+SELECT * FROM user_profiles LIMIT 10
+```
 
 Notice that the output shows nested data for `topProductPurchases`, which includes an array of `productId` and `itemsPurchasedLast12Months` values. You can expand the fields by clicking the right triangle in each row.
 
