@@ -40,7 +40,7 @@ function InstallAzureCli()
 
   #install azure cli
   Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile C:\AzureCLI.msi -usebasicparsing; 
-  Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; 
+  Start-Process msiexec.exe -Wait -ArgumentList '/I C:\AzureCLI.msi /quiet'; 
   rm C:\AzureCLI.msi
 }
 
