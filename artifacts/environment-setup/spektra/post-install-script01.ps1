@@ -163,7 +163,7 @@ InstallGit
         
 InstallAzureCli
 
-#Uninstall-AzureRm -ea SilentlyContinue
+Uninstall-AzureRm -ea SilentlyContinue
 
 CreateLabFilesDirectory
 
