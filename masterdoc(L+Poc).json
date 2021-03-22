@@ -40,6 +40,10 @@
       {
         "RawFilePath": "https://raw.githubusercontent.com/solliancenet/azure-synapse-analytics-workshop-400/master/day-03/lab08-monitoring.md",
         "Order": 9
+      },
+      {
+        "RawFilePath": "https://raw.githubusercontent.com/solliancenet/azure-synapse-analytics-workshop-400/master/day-04/challenges.md",
+        "Order": 10
       }
     ]
   }
