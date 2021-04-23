@@ -48,13 +48,11 @@ For the remainder of this guide, the following terms will be used for various AS
 | Default file system container | `DefaultFileSystem` |
 | SQL Pool | `SqlPool01` |
 
-## Exercise 1: Configure linked service and create datasets
+## Lab prerequisite
 
-### Task 1: Create linked service
+Start the SQL Pool in your lab environment.
 
-Our data sources for labs 1 and 2 include files stored in ADLS Gen2 and Azure Cosmos DB. The linked service for ADLS Gen2 already exists as it is the primary ADLS Gen2 account for the workspace.
-
-1. Open Synapse Analytics Studio (<https://web.azuresynapse.net/>). If you see a prompt to select your Synapse Analytics workspace, select the Azure subscription and workspace name used for the lab. When using a hosted lab environment, the workspace name will end with the same SUFFIX as your user name, as shown in the screenshot below. Make note of the suffix, as it is referenced throughout this and the remaining labs.
+1. Open Synapse Studio (<https://web.azuresynapse.net/>). If you see a prompt to select your workspace, select the Azure subscription and workspace name used for the lab. When using a hosted lab environment, the workspace name will end with the same SUFFIX as your user name, as shown in the screenshot below. Make note of the suffix, as it is referenced throughout this and the remaining labs.
 
     ![The username suffix and workspace suffix are highlighted.](media/select-workspace.png "Select workspace")
 
@@ -64,15 +62,29 @@ Our data sources for labs 1 and 2 include files stored in ADLS Gen2 and Azure Co
 
     ![The Close button is highlighted on the Getting started dialog.](media/getting-started.png "Getting started")
 
-3. After connecting to the Synapse Analytics workspace, navigate to the **Manage** hub.
+3. Once the Synapse Studio workspace is loaded, navigate to the **Manage** hub.
 
     ![The Manage menu item is highlighted.](media/manage-hub.png "Manage hub")
 
-4. Open **Linked services** and select **+ New** to create a new linked service. Select **Azure Cosmos DB (SQL API)** in the list of options, then select **Continue**.
+4. From the center menu, select **SQL pools** from beneath the **Analytics pools** heading. Locate `SQLPool01`, and select the **Resume** button.
+
+    ![The Manage menu item is selected, with SQL pools selected from the center menu. The resume button is selected next to the SQLPool01 item.](media/resume-sql-pool.png "SQL pools listing")
+
+## Exercise 1: Configure linked service and create datasets
+
+### Task 1: Create linked service
+
+Our data sources for labs 1 and 2 include files stored in ADLS Gen2 and Azure Cosmos DB. The linked service for ADLS Gen2 already exists as it is the primary ADLS Gen2 account for the workspace.
+
+1. After connecting to the Synapse Analytics workspace, navigate to the **Manage** hub.
+
+    ![The Manage menu item is highlighted.](media/manage-hub.png "Manage hub")
+
+2. Open **Linked services** and select **+ New** to create a new linked service. Select **Azure Cosmos DB (SQL API)** in the list of options, then select **Continue**.
 
     ![Manage, New, and the Azure Cosmos DB linked service option are highlighted.](media/create-cosmos-db-linked-service-step1.png "New linked service")
 
-5. Name the linked service `asacosmosdb01`. Set the **Account selection method** to `From Azure subscription` and select the `Azure Labs X` subscription. For **Azure Cosmos DB account name** select `asacosmosdb{Suffix}` and set the **Database name** value to `CustomerProfile`.
+3. Name the linked service `asacosmosdb01`. Set the **Account selection method** to `From Azure subscription` and select the `Azure Labs X` subscription. For **Azure Cosmos DB account name** select `asacosmosdb{Suffix}` and set the **Database name** value to `CustomerProfile`.
 
     ![New Azure Cosmos DB linked service.](media/create-cosmos-db-linked-service.png "New linked service")
 
@@ -201,19 +213,17 @@ When you query Parquet files using a serverless SQL pool, you can explore the da
 
     ![The Spark pool list is displayed.](media/attach-spark-pool.png "Attach to Spark pool")
 
-4. Update the cell to **remove** the `%%pyspark` line. If you do not do this, you will receive an error when you update the cell during the steps that follow.
-
-5. Select **Run all** on the notebook toolbar to execute the notebook.
+4. Select **Run all** on the notebook toolbar to execute the notebook.
 
     > **Note:** The first time you run a notebook in a Spark pool, Synapse creates a new session. This can take approximately 3-5 minutes.
 
     > **Note:** To run just the cell, either hover over the cell and select the _Run cell_ icon to the left of the cell, or select the cell then type **Ctrl+Enter** on your keyboard.
 
-6. Create a new cell underneath by selecting **{} Add code** when hovering over the blank space at the bottom of the notebook.
+5. Create a new cell underneath by hovering over the **+** button and selecting the **Code cell** item. The **+** button is located beneath the notebook cell on the left. Alternatively, you can also expand the **+ Cell** menu in the Notebook toolbar and select the **Code cell** item.
 
     ![The Add Code menu option is highlighted.](media/new-cell.png "Add code")
 
-7. The Spark engine can analyze the Parquet files and infer the schema. To do this, enter the following in the new cell:
+6. The Spark engine can analyze the Parquet files and infer the schema. To do this, enter the following in the new cell:
 
     ```python
     df.printSchema()
@@ -236,7 +246,7 @@ When you query Parquet files using a serverless SQL pool, you can explore the da
         |-- StoreId: short (nullable = true)
     ```
 
-8. Now let's use the dataframe to perform the same grouping and aggregate query we performed with the serverless SQL pool. Create a new cell and enter the following:
+7. Now let's use the dataframe to perform the same grouping and aggregate query we performed with the serverless SQL pool. Create a new cell and enter the following:
 
     ```python
     from pyspark.sql import SparkSession
