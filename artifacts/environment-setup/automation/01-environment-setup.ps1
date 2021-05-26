@@ -1,4 +1,4 @@
-$InformationPreference = "Continue"
+$InformationPreference = "Continue"d
 
 $IsCloudLabs = Test-Path C:\LabFiles\AzureCreds.ps1;
 
